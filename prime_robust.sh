@@ -2,7 +2,7 @@
 # prime_robust.sh - Robuste, dateibasierte Offline-Bibliothek auf dem NOTFALL_PC
 
 # Konfiguration
-TARGET_MOUNT="${NOTFALL_PC_MOUNT:-/media/jpw/NOTFALL_PC}"
+TARGET_MOUNT="${NOTFALL_PC_MOUNT}"
 MAVEN_DIR="${TARGET_MOUNT}/libraries/maven"
 PYTHON_DIR="${TARGET_MOUNT}/libraries/python"
 NPM_DIR="${TARGET_MOUNT}/libraries/npm"

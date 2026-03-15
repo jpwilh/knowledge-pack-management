@@ -1,7 +1,7 @@
 #!/bin/bash
 # download_models.sh - Lädt LLM-Modelle für den Offline-Betrieb via Ollama
 
-TARGET_MOUNT="${NOTFALL_PC_MOUNT:-/media/jpw/NOTFALL_PC}"
+TARGET_MOUNT="${NOTFALL_PC_MOUNT}"
 MODEL_DIR="${TARGET_MOUNT}/models"
 
 echo "=== LLM Model Download Start ==="

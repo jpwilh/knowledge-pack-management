@@ -12,10 +12,10 @@ Aufbau und Wartung eines 100% autarken Offline-Systems (NOTFALL_PC) mit Wissen u
 ### 2. Datenintegrität (Software Artifacts)
 *   **Keine Abhängigkeit von Diensten:** Bevorzuge die "Robust-Lösung" (`prime_robust.sh`), die Artefakte als echte Dateien im Dateisystem ablegt, anstatt sie in Container-internen Datenbanken zu verstecken.
 *   **Stabilität:** Nur getaggte, stabile Versionen (Releases) laden. Snapshots vermeiden, da diese offline nicht reproduzierbar sind.
-*   **Transparenz:** Die Ordnerstruktur auf `/media/jpw/NOTFALL_PC/libraries` muss menschenlesbar und ohne Spezialtools nutzbar sein.
+*   **Transparenz:** Die Ordnerstruktur auf `<NOTFALL_PC_MOUNT>/libraries` muss menschenlesbar und ohne Spezialtools nutzbar sein.
 
 ### 3. Ziel-Hardware
-*   Primäres Ziel ist immer `/media/jpw/NOTFALL_PC`. Alle Pfade müssen relativ zu diesem Mountpoint konfigurierbar oder fest verdrahtet sein.
+*   Primäres Ziel ist immer `<NOTFALL_PC_MOUNT>`. Alle Pfade müssen relativ zu diesem Mountpoint konfigurierbar oder fest verdrahtet sein.
 
 ## Benutzung (CLI)
 1.  `bash status.sh` - Gesamtüberblick.
