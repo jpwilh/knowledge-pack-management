@@ -1,46 +1,33 @@
-# Offline Knowledge & Artifact Pack (2026 Maintenance Edition)
+# Offline Knowledge & Artifact Pack (2026 Modular Edition)
 
-Dieses Repository enthält eine Sammlung von Skripten zum Aufbau und zur Wartung eines autarken Offline-Systems auf Basis des **NOTFALL_PC** Konzepts. Es kombiniert globales Wissen (Wikipedia, Reader) mit einer umfangreichen Basis an Software-Entwicklungs-Artefakten (Java, Python, NPM, Docker), OS-Installationsmedien und lokalen KI-Modellen (LLMs).
+Zentrales Management-System für den **NOTFALL_PC**. Dieses Repository nutzt eine modulare Architektur zur Sicherung von globalem Wissen, Software-Artefakten, Betriebssystemen und KI-Modellen.
 
-## Kern-Features
-
-### 1. Global Knowledge Pack (Wikipedia & ZIM)
-*   **Skript:** `offline_knowledge_pack.sh` & `download_readers.sh`
-*   **Inhalt:** Aktuelle ZIM-Dateien (Wikipedia, StackOverflow, Wiktionary, etc.) und portable Reader.
-
-### 2. Software Artifact Cache (Robust-Edition)
-*   **Skript:** `prime_robust.sh`
-*   **Inhalt:** Stabile Framework-Stacks (Java/Maven, Python/pip, NPM, Docker).
-
-### 3. OS Installationsmedien
-*   **Skript:** `download_isos.sh`
-*   **Inhalt:** Ubuntu 24.04 LTS, SystemRescue und Anleitungen für Windows 11.
-
-### 4. Lokale KI (LLMs)
-*   **Skript:** `download_models.sh`
-*   **Inhalt:** Leistungsstarke Modelle für Chat (Llama 3.1), Programmierung (DeepSeek) und Vision (Llava) via Ollama.
+## Kern-Komponenten
+*   **`manifest.json`**: Zentrale Liste aller Quellen und Zielpfade.
+*   **`notfall_manage.sh`**: Einstiegspunkt für alle Update-Vorgänge.
+*   **`core_engine.sh`**: Robuste Download- und Validierungs-Logik.
 
 ## Benutzung
 
 ### Voraussetzungen
-*   Linux-System mit Docker (für NPM-Proxy)
-*   Java/Maven, Python3 & Ollama installiert.
-*   Mountpoint `<TARGET_MOUNT>` muss existieren und beschreibbar sein.
+*   Linux-System mit Docker, Java/Maven, Python3, `jq` und `curl`.
+*   Umgebungsvariable `NOTFALL_PC_MOUNT` muss gesetzt sein.
 
-### Installation & Priming
-1.  **Status prüfen:** `bash status.sh`
-2.  **Wissens-Download starten:** `bash offline_knowledge_pack.sh`
-3.  **Software-Bibliothek aufbauen:** `bash prime_robust.sh`
-4.  **OS-Images laden:** `bash download_isos.sh`
-5.  **KI-Modelle laden:** `bash download_models.sh`
+### Update-Vorgänge
+Führe das Management-Skript mit dem gewünschten Parameter aus:
 
-### Offline-Nutzung
-*   **Java/Python/NPM/Docker:** Siehe Dokumentation in `README.md`.
-*   **KI/LLMs:** `export OLLAMA_MODELS=<TARGET_MOUNT>/models && ollama serve`
+*   **Alles aktualisieren:** `./notfall_manage.sh --all`
+*   **Wissen (Wikipedia):** `./notfall_manage.sh --knowledge`
+*   **Software (Maven/Pip/NPM/Docker):** `./notfall_manage.sh --software`
+*   **KI Modelle (LLMs):** `./notfall_manage.sh --models`
+*   **Betriebssysteme (ISOs):** `./notfall_manage.sh --isos`
 
-## Überwachung
-*   `traffic.sh`: Live-Netzwerkmonitor.
-*   `watchdog.sh`: Automatischer Neustart bei Verbindungsabbrüchen.
+## Jährliche Wartung
+Um das System aktuell zu halten, sollte einmal pro Jahr folgende Routine durchgeführt werden:
+1.  **`manifest.json` prüfen:** URLs für ZIM-Dateien und ISOs auf Aktualität prüfen.
+2.  **Versionen anpassen:** Stabile Framework-Versionen (z.B. Spring Boot) im JSON hochsetzen.
+3.  **Bereinigung:** Veraltete Großdateien (ISOs/ZIMs) auf dem `NOTFALL_PC` manuell löschen.
+4.  **Lauf:** `./notfall_manage.sh --all` ausführen.
 
 ---
-*Status März 2026 - Gepflegt für den autarken Notfallbetrieb.*
+*Status März 2026 - Modularisiert für maximale Zuverlässigkeit.*

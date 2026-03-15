@@ -1,0 +1,51 @@
+{
+  "project": "NOTFALL_PC Artifact Management",
+  "version": "2026.03",
+  "knowledge": {
+    "base_path": "notfall-pc/01_zim",
+    "items": [
+      { "name": "Wikipedia DE", "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_de_all_maxi_2026-01.zim", "type": "zim" },
+      { "name": "Wikipedia EN", "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_all_maxi_2026-02.zim", "type": "zim" },
+      { "name": "StackOverflow DE", "url": "https://download.kiwix.org/zim/stack_exchange/stackoverflow.com_de_all_2024-12.zim", "type": "zim" },
+      { "name": "Wiktionary DE", "url": "https://download.kiwix.org/zim/wiktionary/wiktionary_de_all_2025-01.zim", "type": "zim" }
+    ]
+  },
+  "software": {
+    "maven": {
+      "base_path": "libraries/maven",
+      "items": [
+        "org.springframework.boot:spring-boot-starter-web:3.3.0",
+        "org.springframework.boot:spring-boot-starter-data-jpa:3.3.0",
+        "org.apache.camel:camel-core:4.4.0",
+        "jakarta.platform:jakarta.jakartaee-api:10.0.0",
+        "junit:junit:4.13.2"
+      ]
+    },
+    "python": {
+      "base_path": "libraries/python",
+      "items": ["django", "flask", "fastapi", "pandas", "tensorflow", "ansible", "requests"]
+    },
+    "npm": {
+      "base_path": "libraries/npm",
+      "items": ["next", "react", "vue", "tailwindcss", "lodash", "axios"]
+    },
+    "docker": {
+      "base_path": "libraries/docker",
+      "items": [
+        "ubuntu:24.04", "alpine:latest", "python:3.12-slim", "node:22-slim",
+        "nginx:alpine", "postgres:16-alpine", "redis:7-alpine", "busybox"
+      ]
+    }
+  },
+  "models": {
+    "base_path": "models",
+    "items": ["llama3.1", "phi3", "deepseek-coder-v2:16b-lite-instruct-q4_K_M", "nomic-embed-text", "llava"]
+  },
+  "isos": {
+    "base_path": "isos",
+    "items": [
+      { "name": "Ubuntu Desktop", "url": "https://releases.ubuntu.com/24.04.1/ubuntu-24.04.1-desktop-amd64.iso", "filename": "ubuntu-24.04-desktop.iso" },
+      { "name": "SystemRescue", "url": "https://sourceforge.net/projects/systemrescuecd/files/sysresccd-x86/11.01/systemrescue-11.01-amd64.iso/download", "filename": "systemrescue.iso" }
+    ]
+  }
+}

@@ -28,11 +28,16 @@ echo "=== Software Artifacts ==="
 
 echo ""
 echo "=== Lokale KI (LLMs) ==="
+# Wir pruefen sowohl den Symlink als auch den physischen Pfad
 if [ -d "$MOUNT/models/blobs" ]; then
-    echo "Modelle im Cache: $(ls -1 $MOUNT/models/blobs | wc -l) Blobs"
+    echo "Modelle auf NOTFALL_PC: $(ls -1 $MOUNT/models/blobs | wc -l) Blobs"
     du -sh "$MOUNT/models"
+    # Falls der Dienst laeuft, zeigen wir die Namen an
+    if command -v ollama &> /dev/null; then
+        ollama list 2>/dev/null | grep -v "NAME" || echo "Ollama Dienst antwortet gerade nicht."
+    fi
 else
-    echo "LLM Modelle fehlen."
+    echo "LLM Modelle fehlen auf dem NOTFALL_PC."
 fi
 
 echo ""
