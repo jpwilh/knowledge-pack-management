@@ -13,8 +13,8 @@ fi
 
 echo ""
 echo "=== Knowledge Packs (ZIM) ==="
-if [ -d "$MOUNT/zim" ]; then
-    ls -lh "$MOUNT/zim" | grep ".zim" || echo "Keine ZIM Dateien."
+if [ -d "$MOUNT/notfall-pc/01_zim" ]; then
+    find "$MOUNT/notfall-pc/01_zim" -name "*.zim" -exec ls -lh {} + | awk '{print $5, $9}'
 else
     echo "ZIM Verzeichnis fehlt."
 fi
@@ -25,6 +25,15 @@ echo "=== Software Artifacts ==="
 [ -d "$MOUNT/libraries/python" ] && echo "Python (pip): $(ls -1 $MOUNT/libraries/python/*.whl 2>/dev/null | wc -l) Wheels" || echo "Python (pip): Fehlt"
 [ -d "$MOUNT/libraries/npm" ] && echo "NPM (Proxy Storage): $(find $MOUNT/libraries/npm -name "*.tgz" | wc -l) Pakete" || echo "NPM: Fehlt"
 [ -d "$MOUNT/libraries/docker" ] && echo "Docker Images: $(ls -1 $MOUNT/libraries/docker/*.tar 2>/dev/null | wc -l) Images" || echo "Docker: Fehlt"
+
+echo ""
+echo "=== Lokale KI (LLMs) ==="
+if [ -d "$MOUNT/models/blobs" ]; then
+    echo "Modelle im Cache: $(ls -1 $MOUNT/models/blobs | wc -l) Blobs"
+    du -sh "$MOUNT/models"
+else
+    echo "LLM Modelle fehlen."
+fi
 
 echo ""
 echo "=== OS ISOs ==="
