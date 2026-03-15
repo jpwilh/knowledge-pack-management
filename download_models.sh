@@ -1,36 +1,41 @@
 #!/bin/bash
-# download_models.sh - Lädt LLM-Modelle für den Offline-Betrieb via Ollama
+# download_models.sh - Portabler Download von LLM-Modellen via Docker
 
 TARGET_MOUNT="${NOTFALL_PC_MOUNT}"
 MODEL_DIR="${TARGET_MOUNT}/models"
 
-echo "=== LLM Model Download Start ==="
+echo "=== LLM Model Download (Portable Docker Edition) ==="
 
-# 0. Voraussetzungen prüfen
+# 0. Voraussetzungen pruefen
 bash "$(dirname "$0")/check_requirements.sh" || exit 1
 
-# Prüfen ob Ollama installiert ist
-if ! command -v ollama &> /dev/null; then
-    echo "Ollama nicht gefunden. Installiere Ollama (benötigt Internet)..."
-    curl -fsSL https://ollama.com/install.sh | sh
-fi
+mkdir -p "${MODEL_DIR}"
 
-# Ollama anweisen, den NOTFALL_PC als Speicherort zu nutzen
-export OLLAMA_MODELS="${MODEL_DIR}"
+# 1. Ollama-Container temporaer starten
+# Wir nutzen einen anderen Port (11435), um Konflikte mit lokalem Ollama zu vermeiden
+echo "[*] Starte temporaeren Ollama-Container..."
+docker stop ollama-priming &>/dev/null && docker rm ollama-priming &>/dev/null
+docker run -d --name ollama-priming \
+  -v "${MODEL_DIR}:/root/.ollama" \
+  -p 11435:11434 \
+  ollama/ollama
 
-echo "[1/4] Lade Llama 3.1 8B (General Chat)..."
-ollama pull llama3.1
+# Kurze Pause bis Ollama bereit ist
+sleep 10
 
-echo "[2/4] Lade DeepSeek-Coder-V2-Lite (Programming)..."
-ollama pull deepseek-coder-v2:16b-lite-instruct-q4_K_M
+# 2. Modelle ziehen
+MODELS=("llama3.1" "deepseek-coder-v2:16b-lite-instruct-q4_K_M" "nomic-embed-text" "llava")
 
-echo "[3/4] Lade Nomic-Embed-Text (Embedding)..."
-ollama pull nomic-embed-text
+for model in "${MODELS[@]}"; do
+    echo "[*] Ziehe Modell: ${model}..."
+    docker exec ollama-priming ollama pull "${model}"
+done
 
-echo "[4/4] Lade Llava (Vision/Bilder)..."
-ollama pull llava
+# 3. Cleanup
+echo "[*] Raeume auf..."
+docker stop ollama-priming && docker rm ollama-priming
 
 echo "=== Zusammenfassung ==="
-ls -lh "${MODEL_DIR}"
-echo "LLM Modelle sind nun unter ${MODEL_DIR} gesichert."
-echo "Im Offline-Fall starte Ollama mit: export OLLAMA_MODELS=${MODEL_DIR} && ollama serve"
+echo "Modelle gespeichert in: ${MODEL_DIR}"
+echo "Anzahl Blobs: $(ls -1 ${MODEL_DIR}/models/blobs 2>/dev/null | wc -l)"
+echo "=== LLM Priming Beendet! ==="
