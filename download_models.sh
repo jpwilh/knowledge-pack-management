@@ -16,7 +16,7 @@ mkdir -p "${MODEL_DIR}"
 echo "[*] Starte temporaeren Ollama-Container..."
 docker stop ollama-priming &>/dev/null && docker rm ollama-priming &>/dev/null
 docker run -d --name ollama-priming \
-  -v "${MODEL_DIR}:/root/.ollama" \
+  -v "${MODEL_DIR}:/root/.ollama/models" \
   -p 11435:11434 \
   ollama/ollama
 
@@ -24,7 +24,7 @@ docker run -d --name ollama-priming \
 sleep 10
 
 # 2. Modelle ziehen
-MODELS=("llama3.1" "deepseek-coder-v2:16b-lite-instruct-q4_K_M" "nomic-embed-text" "llava")
+MODELS=("llama3.1" "phi3" "deepseek-coder-v2:16b-lite-instruct-q4_K_M" "nomic-embed-text" "llava")
 
 for model in "${MODELS[@]}"; do
     echo "[*] Ziehe Modell: ${model}..."
