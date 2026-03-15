@@ -14,22 +14,16 @@ echo "=== Robust Priming Start ==="
 echo "[0/4] Prüfe Voraussetzungen..."
 REQUIRED_TOOLS=("mvn" "pip" "docker" "npm" "git" "sudo")
 MISSING_TOOLS=()
-
 for tool in "${REQUIRED_TOOLS[@]}"; do
-    if ! command -v "$tool" &> /dev/null; then
-        MISSING_TOOLS+=("$tool")
-    fi
+    if ! command -v "$tool" &> /dev/null; then MISSING_TOOLS+=("$tool"); fi
 done
-
 if [ ${#MISSING_TOOLS[@]} -ne 0 ]; then
-    echo "FEHLER: Folgende Programme fehlen: ${MISSING_TOOLS[*]}"
-    echo "Bitte installiere diese mit: sudo apt update && sudo apt install -y maven python3-pip docker.io nodejs git"
+    echo "FEHLER: Programme fehlen: ${MISSING_TOOLS[*]}"
     exit 1
 fi
-echo "Alle benötigten Programme sind vorhanden."
 
-# 1. Java (Maven) - Stabile Release-Versionen von Spring Boot & Camel
-echo "[1/4] Priming Java (Maven) nach ${MAVEN_DIR}..."
+# 1. Java (Maven)
+echo "[1/4] Priming Java (Maven)..."
 JAVA_DEPS=(
     "org.springframework.boot:spring-boot-starter-web:3.3.0"
     "org.springframework.boot:spring-boot-starter-data-jpa:3.3.0"
@@ -37,57 +31,55 @@ JAVA_DEPS=(
     "jakarta.platform:jakarta.jakartaee-api:10.0.0"
     "junit:junit:4.13.2"
 )
-
 for dep in "${JAVA_DEPS[@]}"; do
-    echo "Processing Java Lib: ${dep}"
-    mvn dependency:get -Dartifact="${dep}" -Dmaven.repo.local="${MAVEN_DIR}" -Dtransitive=true
+    # Maven überspringt automatisch, wenn im lokalen Repository vorhanden
+    mvn dependency:get -Dartifact="${dep}" -Dmaven.repo.local="${MAVEN_DIR}" -Dtransitive=true -q
 done
 
-# 2. Python (pip) - Stabile Wheels ziehen
-echo "[2/4] Priming Python (pip) nach ${PYTHON_DIR}..."
+# 2. Python (pip)
+echo "[2/4] Priming Python (pip)..."
 PYTHON_PKGS=("django" "flask" "fastapi" "pandas" "tensorflow" "ansible" "requests")
-
 for pkg in "${PYTHON_PKGS[@]}"; do
-    echo "Downloading Python: ${pkg}"
-    pip download --dest "${PYTHON_DIR}" "${pkg}"
+    # Wir laden nur, wenn das Paket noch nicht als .whl vorhanden ist
+    if ls "${PYTHON_DIR}/${pkg}"*.whl &>/dev/null; then
+        echo "Python Paket ${pkg} bereits vorhanden. Überspringe."
+    else
+        pip download --dest "${PYTHON_DIR}" "${pkg}" -q
+    fi
 done
 
 # 3. NPM (Verdaccio Proxy)
-echo "[3/4] Priming NPM (Verdaccio Proxy) nach ${NPM_DIR}..."
-# ... (restlicher NPM Teil bleibt gleich bis zum Aufräumen)
-# Container aufräumen
+echo "[3/4] Priming NPM (Verdaccio Proxy)..."
+NPM_PKGS=("next" "react" "vue" "tailwindcss" "lodash" "axios")
 docker stop verdaccio-proxy &>/dev/null && docker rm verdaccio-proxy &>/dev/null
-# Berechtigungen wieder auf jpw zurückgeben
+sudo chown -R 10001:10001 "${NPM_DIR}"
+docker run -d --name verdaccio-proxy -p 4873:4873 -v "${NPM_DIR}:/verdaccio/storage" verdaccio/verdaccio &>/dev/null
+sleep 10
+for pkg in "${NPM_PKGS[@]}"; do
+    # npm install überspringt automatisch, wenn im Verdaccio-Storage
+    npm install --registry "http://localhost:4873" "${pkg}" --prefix /tmp/npm_prime --no-save -q
+done
+docker stop verdaccio-proxy &>/dev/null && docker rm verdaccio-proxy &>/dev/null
 sudo chown -R jpw:jpw "${NPM_DIR}"
 rm -rf /tmp/npm_prime
 
 # 4. Docker Basis-Images
-echo "[4/4] Priming Docker Images nach ${DOCKER_DIR}..."
-DOCKER_DIR="/media/jpw/NOTFALL_PC/libraries/docker"
+echo "[4/4] Priming Docker Images..."
 sudo mkdir -p "${DOCKER_DIR}" && sudo chown jpw:jpw "${DOCKER_DIR}"
-
-IMAGES=(
-    "ubuntu:24.04"
-    "alpine:latest"
-    "python:3.12-slim"
-    "node:22-slim"
-    "openjdk:21-slim"
-    "nginx:alpine"
-    "postgres:16-alpine"
-    "redis:7-alpine"
-    "busybox"
-)
-
+IMAGES=("ubuntu:24.04" "alpine:latest" "python:3.12-slim" "node:22-slim" "nginx:alpine" "postgres:16-alpine" "redis:7-alpine" "busybox")
 for img in "${IMAGES[@]}"; do
     filename=$(echo "${img}" | tr ': ' '_').tar
-    echo "Processing Docker Image: ${img} -> ${filename}"
-    docker pull "${img}"
-    docker save "${img}" -o "${DOCKER_DIR}/${filename}"
+    if [ -f "${DOCKER_DIR}/${filename}" ]; then
+        echo "Docker Image ${img} bereits als .tar vorhanden. Überspringe."
+    else
+        docker pull "${img}" -q
+        docker save "${img}" -o "${DOCKER_DIR}/${filename}"
+    fi
 done
 
 echo "=== Zusammenfassung ==="
 echo "Java (Maven) Dateien: $(find ${MAVEN_DIR} -type f | wc -l)"
-echo "Python Wheels: $(ls -l ${PYTHON_DIR} | wc -l)"
-echo "NPM Pakete: $(ls -R ${NPM_DIR} | grep '.tgz' | wc -l)"
-echo "Docker Images: $(ls -l ${DOCKER_DIR} | grep '.tar' | wc -l)"
+echo "Python Wheels: $(ls -1 ${PYTHON_DIR}/*.whl 2>/dev/null | wc -l)"
+echo "NPM Pakete: $(find ${NPM_DIR} -name "*.tgz" | wc -l)"
+echo "Docker Images: $(ls -1 ${DOCKER_DIR}/*.tar 2>/dev/null | wc -l)"
 echo "=== Robust Priming Beendet! ==="

@@ -7,22 +7,32 @@ mkdir -p "${TARGET_DIR}"
 
 echo "=== OS ISO Download Start ==="
 
-# 1. Linux: Ubuntu 24.04 LTS (Desktop)
-echo "[1/3] Lade Ubuntu 24.04 LTS Desktop..."
-# Wir nutzen -c für Resume-Support bei großen Dateien
-wget -c "https://releases.ubuntu.com/24.04/ubuntu-24.04.1-desktop-amd64.iso" -O "${TARGET_DIR}/ubuntu-24.04-desktop.iso"
+# Funktion für robusten Download
+download_iso() {
+    local name=$1
+    local url=$2
+    local dest=$3
+    
+    echo "[*] Prüfe ${name}..."
+    if [ -f "$dest" ]; then
+        echo "Datei existiert bereits. Prüfe auf Vollständigkeit..."
+        # Wir nutzen wget -c, was nur fehlende Teile lädt
+    fi
+    wget -c "$url" -O "$dest"
+}
 
-# 2. Linux: SystemRescue (Essentiell für Reparaturen)
-echo "[2/3] Lade SystemRescue ISO..."
-wget -c "https://sourceforge.net/projects/systemrescuecd/files/sysresccd-x86/11.01/systemrescue-11.01-amd64.iso/download" -O "${TARGET_DIR}/systemrescue-11.01.iso"
+# 1. Linux: Ubuntu 24.04.1 LTS (Desktop)
+# Link aktualisiert auf 24.04.1
+echo "[1/3] Ubuntu LTS..."
+download_iso "Ubuntu 24.04.1" "https://releases.ubuntu.com/24.04.1/ubuntu-24.04.1-desktop-amd64.iso" "${TARGET_DIR}/ubuntu-24.04-desktop.iso"
 
-# 3. Windows: Windows 11
-echo "[3/3] Windows 11 Information..."
-echo "HINWEIS: Microsoft erlaubt keine dauerhaften direkten Download-Links."
-echo "Bitte lade die aktuelle Windows 11 ISO manuell herunter und speichere sie in:"
-echo "${TARGET_DIR}/windows11.iso"
-echo "Link: https://www.microsoft.com/software-download/windows11"
+# 2. Linux: SystemRescue
+echo "[2/3] SystemRescue..."
+download_iso "SystemRescue" "https://sourceforge.net/projects/systemrescuecd/files/sysresccd-x86/11.01/systemrescue-11.01-amd64.iso/download" "${TARGET_DIR}/systemrescue-11.01.iso"
+
+# 3. Windows
+echo "[3/3] Windows Hinweis..."
+echo "HINWEIS: Windows ISOs müssen manuell unter https://www.microsoft.com/software-download/windows11 geladen werden."
 
 echo "=== Zusammenfassung ==="
 ls -lh "${TARGET_DIR}"
-echo "ISO-Download Phase beendet."
