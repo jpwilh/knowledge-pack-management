@@ -47,5 +47,13 @@
       { "name": "Ubuntu Desktop", "url": "https://releases.ubuntu.com/24.04.1/ubuntu-24.04.1-desktop-amd64.iso", "filename": "ubuntu-24.04-desktop.iso" },
       { "name": "SystemRescue", "url": "https://sourceforge.net/projects/systemrescuecd/files/sysresccd-x86/11.01/systemrescue-11.01-amd64.iso/download", "filename": "systemrescue.iso" }
     ]
+  },
+  "readers": {
+    "base_path": "notfall-pc/00_reader",
+    "items": [
+      { "name": "Kiwix Android", "url": "https://download.kiwix.org/release/kiwix-android/org.kiwix.kiwixmobile.standalone-3.14.0.apk", "filename": "kiwix_android.apk" },
+      { "name": "SumatraPDF Portable", "url": "https://www.sumatrapdfreader.org/dl/SumatraPDF-3.5.2-64.zip", "filename": "SumatraPDF_portable.zip" },
+      { "name": "Kiwix Desktop (Linux)", "url": "https://download.kiwix.org/release/kiwix-desktop/kiwix-desktop_linux-x86_64.AppImage", "filename": "kiwix-desktop.AppImage" }
+    ]
   }
 }

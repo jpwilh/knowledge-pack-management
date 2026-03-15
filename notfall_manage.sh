@@ -14,6 +14,7 @@ usage() {
     echo "Options:"
     echo "  --all            Alles aktualisieren"
     echo "  --knowledge      Wissens-Datenbanken (ZIM) laden"
+    echo "  --readers        Anzeige-Programme (Kiwix, etc.) laden"
     echo "  --software       Java, Python, NPM, Docker laden"
     echo "  --models         LLM Modelle (Ollama) laden"
     echo "  --isos           Betriebssystem-Images laden"
@@ -31,9 +32,19 @@ run_knowledge() {
     
     echo "$items_json" | jq -c '.[]' | while read -r item; do
         local url=$(echo "$item" | jq -r '.url')
-        local name=$(echo "$item" | jq -r '.name')
         local filename=$(basename "$url")
-        robust_download "$url" "${TARGET_MOUNT}/${base_path}/${filename}" 1000000 # Min 1GB fuer ZIMs
+        robust_download "$url" "${TARGET_MOUNT}/${base_path}/${filename}" 1000000 # Min 1GB
+    done
+}
+
+run_readers() {
+    log ">>> Starte Reader Update..."
+    local base_path=$(get_manifest_val ".readers.base_path")
+    local items_json=$(get_manifest_val ".readers.items")
+    echo "$items_json" | jq -c '.[]' | while read -r item; do
+        local url=$(echo "$item" | jq -r '.url')
+        local fname=$(echo "$item" | jq -r '.filename')
+        robust_download "$url" "${TARGET_MOUNT}/${base_path}/${fname}" 5000 # Min 5MB
     done
 }
 
@@ -116,8 +127,9 @@ run_isos() {
 while [[ $# -gt 0 ]]; do
     case $1 in
         --all)
-            run_knowledge; run_software; run_models; run_isos; shift ;;
+            run_knowledge; run_readers; run_software; run_models; run_isos; shift ;;
         --knowledge) run_knowledge; shift ;;
+        --readers)   run_readers; shift ;;
         --software)  run_software; shift ;;
         --models)    run_models; shift ;;
         --isos)      run_isos; shift ;;
