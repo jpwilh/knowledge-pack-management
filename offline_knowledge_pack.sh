@@ -6,7 +6,7 @@ set -uo pipefail
 # Target: ~1 TB Storage
 
 # PATHS - Adjusted to detected drive location
-EXTERNAL_DRIVE="/media/jpw/NOTFALL_PC"
+EXTERNAL_DRIVE="${NOTFALL_PC_MOUNT:-/media/jpw/NOTFALL_PC}"
 TARGET_DIR="$EXTERNAL_DRIVE/notfall-pc"
 mkdir -p "$TARGET_DIR/99_meta"
 RUN_LOG="$TARGET_DIR/99_meta/run_v3_1tb_$(date +%Y%m%d).log"

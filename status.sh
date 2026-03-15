@@ -1,7 +1,7 @@
 #!/bin/bash
 # status.sh - Gesamtüberblick über den NOTFALL_PC Status
 
-MOUNT="/media/jpw/NOTFALL_PC"
+MOUNT="${NOTFALL_PC_MOUNT:-/media/jpw/NOTFALL_PC}"
 
 echo "=== NOTFALL_PC System Status ==="
 if mountpoint -q "$MOUNT"; then

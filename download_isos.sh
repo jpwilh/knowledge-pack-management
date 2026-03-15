@@ -1,7 +1,8 @@
 #!/bin/bash
 # download_isos.sh - Lädt OS-Installationsmedien für den Notfall
 
-TARGET_DIR="/media/jpw/NOTFALL_PC/isos"
+TARGET_MOUNT="${NOTFALL_PC_MOUNT:-/media/jpw/NOTFALL_PC}"
+TARGET_DIR="${TARGET_MOUNT}/isos"
 mkdir -p "${TARGET_DIR}"
 
 echo "=== OS ISO Download Start ==="

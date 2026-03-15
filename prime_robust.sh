@@ -2,10 +2,11 @@
 # prime_robust.sh - Robuste, dateibasierte Offline-Bibliothek auf dem NOTFALL_PC
 
 # Konfiguration
-MAVEN_DIR="/media/jpw/NOTFALL_PC/libraries/maven"
-PYTHON_DIR="/media/jpw/NOTFALL_PC/libraries/python"
-NPM_DIR="/media/jpw/NOTFALL_PC/libraries/npm"
-DOCKER_DIR="/media/jpw/NOTFALL_PC/libraries/docker"
+TARGET_MOUNT="${NOTFALL_PC_MOUNT:-/media/jpw/NOTFALL_PC}"
+MAVEN_DIR="${TARGET_MOUNT}/libraries/maven"
+PYTHON_DIR="${TARGET_MOUNT}/libraries/python"
+NPM_DIR="${TARGET_MOUNT}/libraries/npm"
+DOCKER_DIR="${TARGET_MOUNT}/libraries/docker"
 
 echo "=== Robust Priming Start ==="
 
