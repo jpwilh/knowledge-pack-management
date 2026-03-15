@@ -24,18 +24,23 @@ usage() {
 if [ $# -eq 0 ]; then usage; fi
 
 # --- MODULE ---
-
 run_knowledge() {
     log ">>> Starte Knowledge Pack Update..."
-    local base_path=$(get_manifest_val ".knowledge.base_path")
     local items_json=$(get_manifest_val ".knowledge.items")
-    
+
     echo "$items_json" | jq -c '.[]' | while read -r item; do
         local url=$(echo "$item" | jq -r '.url')
+        local name=$(echo "$item" | jq -r '.name')
+        local path=$(echo "$item" | jq -r '.path')
         local filename=$(basename "$url")
-        robust_download "$url" "${TARGET_MOUNT}/${base_path}/${filename}" 1000000 # Min 1GB
+        # Sonderbehandlung fuer Dateinamen (z.B. PDFs mit langen Namen)
+        if echo "$item" | jq -e '.filename' &>/dev/null; then
+            filename=$(echo "$item" | jq -r '.filename')
+        fi
+        robust_download "$url" "${TARGET_MOUNT}/${path}/${filename}" 1000 # Min 1MB
     done
 }
+
 
 run_readers() {
     log ">>> Starte Reader Update..."
