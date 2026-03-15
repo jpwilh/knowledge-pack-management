@@ -10,17 +10,8 @@ DOCKER_DIR="${TARGET_MOUNT}/libraries/docker"
 
 echo "=== Robust Priming Start ==="
 
-# 0. Tool-Check
-echo "[0/4] Prüfe Voraussetzungen..."
-REQUIRED_TOOLS=("mvn" "pip" "docker" "npm" "git" "sudo")
-MISSING_TOOLS=()
-for tool in "${REQUIRED_TOOLS[@]}"; do
-    if ! command -v "$tool" &> /dev/null; then MISSING_TOOLS+=("$tool"); fi
-done
-if [ ${#MISSING_TOOLS[@]} -ne 0 ]; then
-    echo "FEHLER: Programme fehlen: ${MISSING_TOOLS[*]}"
-    exit 1
-fi
+# 0. Voraussetzungen prüfen
+bash "$(dirname "$0")/check_requirements.sh" || exit 1
 
 # 1. Java (Maven)
 echo "[1/4] Priming Java (Maven)..."

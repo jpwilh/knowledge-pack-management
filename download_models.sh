@@ -3,9 +3,11 @@
 
 TARGET_MOUNT="${NOTFALL_PC_MOUNT:-/media/jpw/NOTFALL_PC}"
 MODEL_DIR="${TARGET_MOUNT}/models"
-mkdir -p "${MODEL_DIR}"
 
 echo "=== LLM Model Download Start ==="
+
+# 0. Voraussetzungen prüfen
+bash "$(dirname "$0")/check_requirements.sh" || exit 1
 
 # Prüfen ob Ollama installiert ist
 if ! command -v ollama &> /dev/null; then

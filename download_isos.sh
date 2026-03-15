@@ -3,9 +3,11 @@
 
 TARGET_MOUNT="${NOTFALL_PC_MOUNT:-/media/jpw/NOTFALL_PC}"
 TARGET_DIR="${TARGET_MOUNT}/isos"
-mkdir -p "${TARGET_DIR}"
 
 echo "=== OS ISO Download Start ==="
+
+# 0. Voraussetzungen prüfen
+bash "$(dirname "$0")/check_requirements.sh" || exit 1
 
 # Funktion für robusten Download
 download_iso() {
