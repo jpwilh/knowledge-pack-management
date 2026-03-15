@@ -22,7 +22,7 @@ Dieses Repository enthält eine Sammlung von Skripten zum Aufbau und zur Wartung
 ### Voraussetzungen
 *   Linux-System mit Docker (für NPM-Proxy)
 *   Java/Maven & Python3 installiert (für das Priming)
-*   Mountpoint `/media/jpw/NOTFALL_PC` muss existieren und beschreibbar sein.
+*   Mountpoint `<TARGET_MOUNT>` muss existieren und beschreibbar sein.
 
 ### Installation & Priming
 1.  **Status prüfen:** `bash status.sh`
@@ -30,9 +30,9 @@ Dieses Repository enthält eine Sammlung von Skripten zum Aufbau und zur Wartung
 3.  **Software-Bibliothek aufbauen:** `bash prime_robust.sh`
 
 ### Offline-Nutzung
-*   **Java:** `mvn install -Dmaven.repo.local=/media/jpw/NOTFALL_PC/libraries/maven`
-*   **Python:** `pip install --no-index --find-links=/media/jpw/NOTFALL_PC/libraries/python <paket>`
-*   **NPM:** Verdaccio mit Mount auf `/media/jpw/NOTFALL_PC/libraries/npm` starten.
+*   **Java:** `mvn install -Dmaven.repo.local=<TARGET_MOUNT>/libraries/maven`
+*   **Python:** `pip install --no-index --find-links=<TARGET_MOUNT>/libraries/python <paket>`
+*   **NPM:** Verdaccio mit Mount auf `<TARGET_MOUNT>/libraries/npm` starten.
 
 ## Überwachung
 *   `traffic.sh`: Live-Netzwerkmonitor.
