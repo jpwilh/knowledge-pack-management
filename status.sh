@@ -17,7 +17,7 @@ else
     echo -e "Watchdog: \033[0;31mINAKTIV (Keine automatische Überwachung)\033[0m"
 fi
 
-if pgrep -f "offline_knowledge_pack_v3_de.sh" > /dev/null; then
+if pgrep -f "offline_knowledge_pack.sh" > /dev/null; then
     echo -e "Status:   \033[0;32mAKTIV (Skript läuft im Hintergrund)\033[0m"
 else
     echo -e "Status:   \033[0;31mBEENDET (Skript läuft nicht mehr)\033[0m"
