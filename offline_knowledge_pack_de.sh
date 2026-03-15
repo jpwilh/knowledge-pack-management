@@ -26,29 +26,37 @@ download() {
         return 0
     fi
 
-    # Cleanup if it exists but is suspected to be a small HTML error page
-    if [[ -f "$dest" && $(stat -c%s "$dest") -lt 1000000 ]]; then
-        if grep -q "<html" "$dest" 2>/dev/null; then
-            log "Lösche fehlerhafte HTML-Datei: $(basename "$dest")"
+    # Cleanup if it exists but is suspected to be a small error page or previous fail
+    if [[ -f "$dest" && $(stat -c%s "$dest") -lt 5000000 ]]; then
+        local file_type=$(file -b "$dest" 2>/dev/null)
+        if [[ "$file_type" == *"HTML"* || "$file_type" == *"XML"* ]]; then
+            log "Lösche fehlerhafte Datei (HTML/XML statt Daten): $(basename "$dest")"
             rm -f "$dest"
         fi
     fi
+    rm -f "${dest}.error" # Cleanup any old error markers
 
     log "Lade: $url"
-    # Using aria2c for better speed and resuming
-    if command -v aria2c >/dev/null; then
-        aria2c --dir="$(dirname "$dest")" --out="$(basename "$dest")" \
-               --continue=true --max-connection-per-server=8 --split=8 \
-               --min-split-size=5M --summary-interval=60 "$url"
-    else
-        curl -L -f -o "$dest" "$url"
-    fi
+    # Using curl with -L (follow redirect), -C - (continue), -f (fail on 4xx/5xx)
+    # Using a modern User-Agent to avoid some mirror filtering
+    curl -L -f -C - -o "$dest" \
+         -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
+         --connect-timeout 30 --retry 5 "$url"
 
-    # Final check: Is it HTML?
-    if [[ -f "$dest" && $(head -c 1024 "$dest" | grep -q "<html") ]]; then
-        warn "FEHLER: Download von $(basename "$dest") scheint HTML statt des erwarteten Inhalts zu sein!"
-        mv "$dest" "${dest}.error.html"
-        return 1
+    # Final validation: Is it what we expect?
+    if [[ -f "$dest" ]]; then
+        local final_type=$(file -b "$dest" 2>/dev/null)
+        if [[ "$final_type" == *"HTML"* || "$final_type" == *"XML"* ]]; then
+            warn "FEHLER: Download von $(basename "$dest") ist ungültig ($final_type)!"
+            mv "$dest" "${dest}.error"
+            return 1
+        fi
+        # If it's too small after download, it's also a fail
+        if [[ $(stat -c%s "$dest") -lt 100000 ]]; then
+             warn "FEHLER: Datei $(basename "$dest") ist extrem klein ($(stat -c%s "$dest") Bytes)!"
+             mv "$dest" "${dest}.error"
+             return 1
+        fi
     fi
 }
 
@@ -94,7 +102,7 @@ download "$ZIM_BASE/gutenberg/gutenberg_de_all_2026-01.zim" "$TARGET_DIR/01_zim/
 download "$ZIM_BASE/gutenberg/gutenberg_en_all_2025-11.zim" "$TARGET_DIR/01_zim/buecher/gutenberg_en.zim"
 
 # 8. READER TOOLS (FIXED)
-KIWIX_ANDROID_LATEST="https://download.kiwix.org/bin/android/kiwix-3.14.0.apk"
+KIWIX_ANDROID_LATEST="https://download.kiwix.org/release/kiwix-android/org.kiwix.kiwixmobile.standalone-3.14.0.apk"
 SUMATRA_LATEST="https://www.sumatrapdfreader.org/dl/SumatraPDF-3.5.2-64.zip"
 # Note: These URLs might need manual update if they change version
 download "$KIWIX_ANDROID_LATEST" "$TARGET_DIR/00_reader/kiwix_android.apk"
