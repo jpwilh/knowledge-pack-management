@@ -1,21 +1,23 @@
-# Knowledge Pack Management
+# Knowledge Pack & Artifact Management Mandates
 
-## Projekt-Überblick
-Sammlung von Skripten zum Herunterladen, Überwachen und Verwalten des **Offline Knowledge Pack v3 (2026 Maintenance Edition)**.
-
-## Dateistruktur
-- `offline_knowledge_pack.sh`: Das Haupt-Download-Skript (korrigierte 2026 URLs).
-- `status.sh`: Dashboard zur Überwachung von Speicherplatz und Download-Status.
-- `traffic.sh`: Live-Netzwerkmonitor.
-- `watchdog.sh`: Automatische Neustart-Überwachung für das Hauptskript.
-- `download_readers*.sh`: Helfer-Skripte zum Beziehen von PDF/ZIM Readern.
+## Projekt-Fokus
+Aufbau und Wartung eines 100% autarken Offline-Systems (NOTFALL_PC) mit Wissen und Software-Entwicklungsgrundlagen.
 
 ## Haupt-Mandate
-- **Robustheit**: Das Hauptskript validiert Downloads (löscht/umbenennt fehlerhafte HTML-Seiten).
-- **Integrität**: Alle Skripte nutzen `/media/jpw/NOTFALL_PC` als primäres Ziel.
-- **Wartung**: URLs müssen bei 404-Fehlern manuell in `offline_knowledge_pack.sh` aktualisiert werden.
 
-## Benutzung
-1. **Status prüfen**: `bash status.sh`
-2. **Download starten**: `bash offline_knowledge_pack.sh`
-3. **Automatische Überwachung**: `nohup bash watchdog.sh &`
+### 1. Robustheit (Knowledge)
+*   **Validierung:** Das Skript `offline_knowledge_pack.sh` muss Downloads gegen fehlerhafte HTML-Seiten (404/Login-Seiten) validieren und diese ggf. löschen.
+*   **Kontinuität:** Der `watchdog.sh` sorgt für einen unterbrechungsfreien Download-Prozess.
+
+### 2. Datenintegrität (Software Artifacts)
+*   **Keine Abhängigkeit von Diensten:** Bevorzuge die "Robust-Lösung" (`prime_robust.sh`), die Artefakte als echte Dateien im Dateisystem ablegt, anstatt sie in Container-internen Datenbanken zu verstecken.
+*   **Stabilität:** Nur getaggte, stabile Versionen (Releases) laden. Snapshots vermeiden, da diese offline nicht reproduzierbar sind.
+*   **Transparenz:** Die Ordnerstruktur auf `/media/jpw/NOTFALL_PC/libraries` muss menschenlesbar und ohne Spezialtools nutzbar sein.
+
+### 3. Ziel-Hardware
+*   Primäres Ziel ist immer `/media/jpw/NOTFALL_PC`. Alle Pfade müssen relativ zu diesem Mountpoint konfigurierbar oder fest verdrahtet sein.
+
+## Benutzung (CLI)
+1.  `bash status.sh` - Gesamtüberblick.
+2.  `bash prime_robust.sh` - Software-Cache befüllen.
+3.  `bash offline_knowledge_pack.sh` - Wissens-Cache befüllen.

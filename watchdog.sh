@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Watchdog for offline_knowledge_pack.sh
 
-SCRIPT_DIR="/home/jpw/knowledge-pack-management"
+SCRIPT_DIR="/home/jpw/ai-projects/knowledge-pack-management"
 LOG_FILE="/home/jpw/notfall_download_cron.log"
 
 while true; do

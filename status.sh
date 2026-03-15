@@ -4,7 +4,7 @@
 # PATHS - Corrected to detected drive
 TARGET_DIR="/media/jpw/NOTFALL_PC/notfall-pc"
 LOG_DIR="$TARGET_DIR/99_meta"
-SCRIPT_DIR="/home/jpw/knowledge-pack-management"
+SCRIPT_DIR="/home/jpw/ai-projects/knowledge-pack-management"
 
 echo "========================================================"
 echo "   NOTFALL-PC DOWNLOAD DASHBOARD (NOTFALL_PC DRIVE)"
