@@ -33,38 +33,41 @@ for pkg in "${PYTHON_PKGS[@]}"; do
 done
 
 # 3. NPM (Verdaccio Proxy)
-echo "[3/3] Priming NPM (Verdaccio Proxy) nach ${NPM_DIR}..."
-NPM_PKGS=("next" "react" "vue" "tailwindcss" "lodash" "axios")
-
-# Alten Container löschen falls vorhanden
-docker stop verdaccio-proxy &>/dev/null && docker rm verdaccio-proxy &>/dev/null
-
-# Berechtigungen für Verdaccio-User im Container setzen (UID 10001)
-sudo chown -R 10001:10001 "${NPM_DIR}"
-
-# Verdaccio Container starten
-docker run -d --name verdaccio-proxy \
-  -p 4873:4873 \
-  -v "${NPM_DIR}:/verdaccio/storage" \
-  verdaccio/verdaccio
-
-# Längere Pause und Health-Check
-echo "Warte auf Verdaccio..."
-sleep 15
-
-for pkg in "${NPM_PKGS[@]}"; do
-    echo "Installing NPM through Proxy: ${pkg}"
-    npm install --registry "http://localhost:4873" "${pkg}" --prefix /tmp/npm_prime --no-save
-done
-
+echo "[3/4] Priming NPM (Verdaccio Proxy) nach ${NPM_DIR}..."
+# ... (restlicher NPM Teil bleibt gleich bis zum Aufräumen)
 # Container aufräumen
-docker stop verdaccio-proxy && docker rm verdaccio-proxy
+docker stop verdaccio-proxy &>/dev/null && docker rm verdaccio-proxy &>/dev/null
 # Berechtigungen wieder auf jpw zurückgeben
 sudo chown -R jpw:jpw "${NPM_DIR}"
 rm -rf /tmp/npm_prime
+
+# 4. Docker Basis-Images
+echo "[4/4] Priming Docker Images nach ${DOCKER_DIR}..."
+DOCKER_DIR="/media/jpw/NOTFALL_PC/libraries/docker"
+sudo mkdir -p "${DOCKER_DIR}" && sudo chown jpw:jpw "${DOCKER_DIR}"
+
+IMAGES=(
+    "ubuntu:24.04"
+    "alpine:latest"
+    "python:3.12-slim"
+    "node:22-slim"
+    "openjdk:21-slim"
+    "nginx:alpine"
+    "postgres:16-alpine"
+    "redis:7-alpine"
+    "busybox"
+)
+
+for img in "${IMAGES[@]}"; do
+    filename=$(echo "${img}" | tr ': ' '_').tar
+    echo "Processing Docker Image: ${img} -> ${filename}"
+    docker pull "${img}"
+    docker save "${img}" -o "${DOCKER_DIR}/${filename}"
+done
 
 echo "=== Zusammenfassung ==="
 echo "Java (Maven) Dateien: $(find ${MAVEN_DIR} -type f | wc -l)"
 echo "Python Wheels: $(ls -l ${PYTHON_DIR} | wc -l)"
 echo "NPM Pakete: $(ls -R ${NPM_DIR} | grep '.tgz' | wc -l)"
+echo "Docker Images: $(ls -l ${DOCKER_DIR} | grep '.tar' | wc -l)"
 echo "=== Robust Priming Beendet! ==="

@@ -16,6 +16,7 @@ Dieses Repository enthält eine Sammlung von Skripten zum Aufbau und zur Wartung
     *   **Java (Maven):** Vollständiges lokales Repository mit Spring Boot 3.3, Camel 4.4, Jakarta EE 10.
     *   **Python (pip):** Wheels für Data Science (Pandas, TensorFlow), Web (Django, FastAPI) und Automatisierung (Ansible).
     *   **NPM:** Lokale Spiegelung von React, Vue, Next.js, Tailwind via Verdaccio-Storage.
+    *   **Docker:** Gängige Basis-Images (Ubuntu, Alpine, Python, Node, etc.) als portable `.tar`-Dateien.
 
 ## Benutzung
 
@@ -33,6 +34,7 @@ Dieses Repository enthält eine Sammlung von Skripten zum Aufbau und zur Wartung
 *   **Java:** `mvn install -Dmaven.repo.local=<TARGET_MOUNT>/libraries/maven`
 *   **Python:** `pip install --no-index --find-links=<TARGET_MOUNT>/libraries/python <paket>`
 *   **NPM:** Verdaccio mit Mount auf `<TARGET_MOUNT>/libraries/npm` starten.
+*   **Docker:** `docker load -i <TARGET_MOUNT>/libraries/docker/<image_name>.tar`
 
 ## Überwachung
 *   `traffic.sh`: Live-Netzwerkmonitor.
