@@ -5,11 +5,30 @@
 MAVEN_DIR="/media/jpw/NOTFALL_PC/libraries/maven"
 PYTHON_DIR="/media/jpw/NOTFALL_PC/libraries/python"
 NPM_DIR="/media/jpw/NOTFALL_PC/libraries/npm"
+DOCKER_DIR="/media/jpw/NOTFALL_PC/libraries/docker"
 
 echo "=== Robust Priming Start ==="
 
+# 0. Tool-Check
+echo "[0/4] Prüfe Voraussetzungen..."
+REQUIRED_TOOLS=("mvn" "pip" "docker" "npm" "git" "sudo")
+MISSING_TOOLS=()
+
+for tool in "${REQUIRED_TOOLS[@]}"; do
+    if ! command -v "$tool" &> /dev/null; then
+        MISSING_TOOLS+=("$tool")
+    fi
+done
+
+if [ ${#MISSING_TOOLS[@]} -ne 0 ]; then
+    echo "FEHLER: Folgende Programme fehlen: ${MISSING_TOOLS[*]}"
+    echo "Bitte installiere diese mit: sudo apt update && sudo apt install -y maven python3-pip docker.io nodejs git"
+    exit 1
+fi
+echo "Alle benötigten Programme sind vorhanden."
+
 # 1. Java (Maven) - Stabile Release-Versionen von Spring Boot & Camel
-echo "[1/3] Priming Java (Maven) nach ${MAVEN_DIR}..."
+echo "[1/4] Priming Java (Maven) nach ${MAVEN_DIR}..."
 JAVA_DEPS=(
     "org.springframework.boot:spring-boot-starter-web:3.3.0"
     "org.springframework.boot:spring-boot-starter-data-jpa:3.3.0"
@@ -24,7 +43,7 @@ for dep in "${JAVA_DEPS[@]}"; do
 done
 
 # 2. Python (pip) - Stabile Wheels ziehen
-echo "[2/3] Priming Python (pip) nach ${PYTHON_DIR}..."
+echo "[2/4] Priming Python (pip) nach ${PYTHON_DIR}..."
 PYTHON_PKGS=("django" "flask" "fastapi" "pandas" "tensorflow" "ansible" "requests")
 
 for pkg in "${PYTHON_PKGS[@]}"; do
