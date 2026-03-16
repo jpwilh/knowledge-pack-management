@@ -27,17 +27,28 @@ if [ $# -eq 0 ]; then usage; fi
 run_knowledge() {
     log ">>> Starte Knowledge Pack Update..."
     local items_json=$(get_manifest_val ".knowledge.items")
+    local manifest_files=()
 
     echo "$items_json" | jq -c '.[]' | while read -r item; do
         local url=$(echo "$item" | jq -r '.url')
         local name=$(echo "$item" | jq -r '.name')
         local path=$(echo "$item" | jq -r '.path')
         local filename=$(basename "$url")
-        # Sonderbehandlung fuer Dateinamen (z.B. PDFs mit langen Namen)
         if echo "$item" | jq -e '.filename' &>/dev/null; then
             filename=$(echo "$item" | jq -r '.filename')
         fi
-        robust_download "$url" "${TARGET_MOUNT}/${path}/${filename}" 1000 # Min 1MB
+        local dest="${TARGET_MOUNT}/${path}/${filename}"
+        manifest_files+=("$dest")
+        robust_download "$url" "$dest" 1000 # Min 1MB
+    done
+
+    # Veraltete Dateien finden (Orphans)
+    log "[*] Suche nach veralteten Dateien (nicht im Manifest)..."
+    find "${TARGET_MOUNT}/notfall-pc/01_zim" -name "*.zim" -type f | while read -r f; do
+        local base_f=$(basename "$f")
+        if ! echo "$items_json" | grep -q "$base_f"; then
+            log "[HINWEIS] Veraltet/Nicht im Manifest: $f"
+        fi
     done
 }
 

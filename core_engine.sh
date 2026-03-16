@@ -31,42 +31,91 @@ print_summary() {
     echo "============================================"
 }
 
+# Generische Integritaetspruefung basierend auf Dateityp
+verify_file_integrity() {
+    local f="$1"
+    local ext="${f##*.}"
+    local filename=$(basename "$f")
+    
+    # Existenzpruefung
+    if [[ ! -s "$f" ]]; then return 1; fi
+
+    case "$ext" in
+        zim)
+            zimcheck -H "$f" &>/dev/null
+            return $? ;;
+        pdf)
+            pdfinfo "$f" &>/dev/null
+            return $? ;;
+        iso)
+            # Prüft ob ISO-Header lesbar ist
+            isoinfo -d -i "$f" &>/dev/null
+            return $? ;;
+        zip|apk)
+            # Testet die ZIP-Integritaet ohne Entpacken
+            unzip -t "$f" &>/dev/null
+            return $? ;;
+        json)
+            jq . "$f" &>/dev/null
+            return $? ;;
+        *)
+            # Fallback für unbekannte Typen: Nur Existenzprüfung
+            return 0 ;;
+    esac
+}
+
 # Universelle Download-Funktion mit Validierung
 # Usage: robust_download <url> <dest> <min_size_kb>
 robust_download() {
     local url="$1"
     local dest="$2"
     local min_size="${3:-100}" # Default 100KB
-    
+
     mkdir -p "$(dirname "$dest")"
-    
-    # Idempotenz-Pruefung
+
+    # Idempotenz-Pruefung mit generischer Validierung
     if [[ -s "$dest" && $(du -k "$dest" | cut -f1) -ge "$min_size" ]]; then
-        log "Bereits vorhanden und valide: $(basename "$dest")"
-        return 0
+        if verify_file_integrity "$dest"; then
+            log "Bereits vorhanden und valide: $(basename "$dest")"
+            return 0
+        else
+            log "Hinweis: $(basename "$dest") ist unvollstaendig oder korrupt. Versuche Fortsetzung..."
+        fi
     fi
-    
-    log "Lade: $url -> $dest"
+
+    log "Lade/Setze fort: $url -> $dest"
     curl -L -f -C - -o "$dest" \
          -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0" \
          --connect-timeout 30 --retry 3 "$url"
-    
+
     local status=$?
     if [ $status -ne 0 ]; then
         error "Download fehlgeschlagen (Exit Code $status): $url"
-        rm -f "$dest" # Bereinigen, falls ein Fragment erstellt wurde
+        # Fehler 33: Range not satisfiable (Lokal groesser als Server) -> Neuanfang
+        if [ $status -eq 33 ]; then
+            log "Server meldet Range-Fehler. Loesche korrupte Datei..."
+            rm -f "$dest"
+        fi
         return 1
     fi
-    
-    # Validierung: Dateityp pruefen (kein HTML/Fehlerseite)
+
+    # Validierung: Dateityp pruefen (Kein HTML-Error)
     local file_type=$(file -b "$dest" 2>/dev/null)
     if [[ "$file_type" == *"HTML"* || "$file_type" == *"XML"* ]]; then
-        error "Validierungsfehler: Datei ist HTML/XML (wahrscheinlich Fehlerseite): $dest"
-        rm -f "$dest" # Fehlerhafte Datei loeschen
+        error "Validierungsfehler: Datei ist HTML/XML (Server-Fehlerseite): $dest"
+        rm -f "$dest"
         return 1
     fi
-    
-    log "Erfolgreich geladen: $(basename "$dest")"
+
+    # Abschluss-Integritaetspruefung
+    log "Verifiziere $(basename "$dest")..."
+    if ! verify_file_integrity "$dest"; then
+        error "Integritaetsfehler nach Download: $dest"
+        rm -f "$dest"
+        return 1
+    fi
+
+    log "Erfolgreich geladen und verifiziert: $(basename "$dest")"
     return 0
 }
 

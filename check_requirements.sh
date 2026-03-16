@@ -17,7 +17,7 @@ echo "OK: NOTFALL_PC_MOUNT = ${NOTFALL_PC_MOUNT}"
 
 # 2. Benötigte Programme prüfen
 echo "[*] Prüfe benötigte Programme..."
-REQUIRED_TOOLS=("mvn" "pip" "docker" "npm" "git" "wget" "curl" "sudo")
+REQUIRED_TOOLS=("mvn" "pip" "docker" "npm" "git" "wget" "curl" "sudo" "jq" "file" "zimcheck" "pdfinfo" "isoinfo" "unzip")
 MISSING_TOOLS=()
 
 for tool in "${REQUIRED_TOOLS[@]}"; do
@@ -26,14 +26,19 @@ for tool in "${REQUIRED_TOOLS[@]}"; do
     fi
 done
 
-# Ollama separat prüfen, da es optional für LLMs ist aber im System sein sollte
+# Optionale/Spezialisierte Tools separat prüfen
 if ! command -v ollama &> /dev/null; then
     echo "HINWEIS: 'ollama' fehlt (wird für LLM-Modelle benötigt)."
 fi
 
+if ! command -v kiwix-serve &> /dev/null; then
+    echo "HINWEIS: 'kiwix-serve' fehlt (wird für die globale Offline-Suche benötigt)."
+    echo "Installation: sudo apt install kiwix-tools"
+fi
+
 if [ ${#MISSING_TOOLS[@]} -ne 0 ]; then
     echo "FEHLER: Folgende Programme fehlen: ${MISSING_TOOLS[*]}"
-    echo "Installation: sudo apt update && sudo apt install -y maven python3-pip docker.io nodejs git wget curl"
+    echo "Installation: sudo apt update && sudo apt install -y maven python3-pip docker.io nodejs git wget curl jq file zim-tools poppler-utils genisoimage unzip"
     exit 1
 fi
 
