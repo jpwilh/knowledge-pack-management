@@ -2,7 +2,34 @@
 # core_engine.sh - Zentrale Funktionen fuer Download und Validierung
 
 log() { echo "[$(date '+%F %T')] $*"; }
-error() { echo "[$(date '+%F %T')] [ERROR] $*" >&2; }
+error() { 
+    echo "[$(date '+%F %T')] [ERROR] $*" >&2
+    echo "$*" >> "${SOURCE_DIR}/failed_items.log"
+}
+
+# Initialisierung der Fehlerliste
+init_error_log() {
+    rm -f "${SOURCE_DIR}/failed_items.log"
+    touch "${SOURCE_DIR}/failed_items.log"
+}
+
+# Zusammenfassung ausgeben
+print_summary() {
+    echo ""
+    echo "============================================"
+    echo "       ZUSAMMENFASSUNG DER AKTUALISIERUNG"
+    echo "============================================"
+    if [ ! -s "${SOURCE_DIR}/failed_items.log" ]; then
+        echo "ALLES OK: Alle Pakete sind auf dem aktuellen Stand."
+    else
+        echo "ACHTUNG: Folgende Pakete konnten nicht geladen werden:"
+        echo "--------------------------------------------"
+        cat "${SOURCE_DIR}/failed_items.log"
+        echo "--------------------------------------------"
+        echo "Bitte pruefe die URLs in der manifest.json oder deine Internetverbindung."
+    fi
+    echo "============================================"
+}
 
 # Universelle Download-Funktion mit Validierung
 # Usage: robust_download <url> <dest> <min_size_kb>
@@ -27,6 +54,7 @@ robust_download() {
     local status=$?
     if [ $status -ne 0 ]; then
         error "Download fehlgeschlagen (Exit Code $status): $url"
+        rm -f "$dest" # Bereinigen, falls ein Fragment erstellt wurde
         return 1
     fi
     
@@ -34,7 +62,7 @@ robust_download() {
     local file_type=$(file -b "$dest" 2>/dev/null)
     if [[ "$file_type" == *"HTML"* || "$file_type" == *"XML"* ]]; then
         error "Validierungsfehler: Datei ist HTML/XML (wahrscheinlich Fehlerseite): $dest"
-        mv "$dest" "${dest}.error"
+        rm -f "$dest" # Fehlerhafte Datei loeschen
         return 1
     fi
     

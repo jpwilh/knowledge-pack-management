@@ -129,6 +129,8 @@ run_isos() {
 
 # --- MAIN LOOP ---
 
+init_error_log
+
 while [[ $# -gt 0 ]]; do
     case $1 in
         --all)
@@ -141,5 +143,7 @@ while [[ $# -gt 0 ]]; do
         *) usage ;;
     esac
 done
+
+print_summary
 
 log "=== Alle gewaehlten Aufgaben abgeschlossen! ==="

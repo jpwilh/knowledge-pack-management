@@ -5,16 +5,17 @@
     "items": [
       { "name": "Wikipedia DE", "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_de_all_maxi_2026-01.zim", "path": "notfall-pc/01_zim/wikipedia" },
       { "name": "Wikipedia EN", "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_all_maxi_2026-02.zim", "path": "notfall-pc/01_zim/wikipedia" },
-      { "name": "StackOverflow EN", "url": "https://download.kiwix.org/zim/stack_exchange/stackoverflow.com_en_all_2023-11.zim", "path": "notfall-pc/01_zim/tech" },
-      { "name": "StackOverflow DE", "url": "https://download.kiwix.org/zim/stack_exchange/stackoverflow.com_de_all_2024-12.zim", "path": "notfall-pc/01_zim/tech" },
+      { "name": "StackOverflow Multi", "url": "https://download.kiwix.org/zim/stack_exchange/stackoverflow.com_en_all_2023-11.zim", "path": "notfall-pc/01_zim/tech" },
       { "name": "Electronics StackExchange", "url": "https://download.kiwix.org/zim/stack_exchange/electronics.stackexchange.com_en_all_2026-02.zim", "path": "notfall-pc/01_zim/tech" },
-      { "name": "Wiktionary DE", "url": "https://download.kiwix.org/zim/wiktionary/wiktionary_de_all_2025-01.zim", "path": "notfall-pc/01_zim/wiktionary" },
+      { "name": "Wiktionary DE", "url": "https://download.kiwix.org/zim/wiktionary/wiktionary_de_all_nopic_2026-01.zim", "path": "notfall-pc/01_zim/wiktionary" },
       { "name": "Khan Academy EN", "url": "https://download.kiwix.org/zim/other/khanacademy_en_all_2023-03.zim", "path": "notfall-pc/01_zim/bildung" },
-      { "name": "TED Talks EN", "url": "https://download.kiwix.org/zim/ted/ted_en_all_2025-10.zim", "path": "notfall-pc/01_zim/bildung" },
       { "name": "LibreTexts Chemistry", "url": "https://download.kiwix.org/zim/libretexts/libretexts.org_en_chem_2025-01.zim", "path": "notfall-pc/01_zim/science" },
       { "name": "LibreTexts Physics", "url": "https://download.kiwix.org/zim/libretexts/libretexts.org_en_phys_2026-01.zim", "path": "notfall-pc/01_zim/science" },
       { "name": "iFixit DE", "url": "https://download.kiwix.org/zim/ifixit/ifixit_de_all_2025-06.zim", "path": "notfall-pc/01_zim/reparatur" },
       { "name": "iFixit EN", "url": "https://download.kiwix.org/zim/ifixit/ifixit_en_all_2025-12.zim", "path": "notfall-pc/01_zim/reparatur" },
+      { "name": "Mechanics StackExchange", "url": "https://download.kiwix.org/zim/stack_exchange/mechanics.stackexchange.com_en_all_2026-02.zim", "path": "notfall-pc/01_zim/reparatur" },
+      { "name": "DIY StackExchange", "url": "https://download.kiwix.org/zim/stack_exchange/diy.stackexchange.com_en_all_2026-02.zim", "path": "notfall-pc/01_zim/reparatur" },
+      { "name": "WikiHow", "url": "https://download.kiwix.org/zim/wikihow/wikihow_en_all_maxi_2024-05.zim", "path": "notfall-pc/01_zim/reparatur" },
       { "name": "Gutenberg DE", "url": "https://download.kiwix.org/zim/gutenberg/gutenberg_de_all_2026-01.zim", "path": "notfall-pc/01_zim/buecher" },
       { "name": "Gutenberg EN", "url": "https://download.kiwix.org/zim/gutenberg/gutenberg_en_all_2025-11.zim", "path": "notfall-pc/01_zim/buecher" },
       { "name": "FAO Irrigation Manual", "url": "https://www.fao.org/4/ai596e/ai596e.pdf", "path": "notfall-pc/03_landwirtschaft/fao" },
@@ -57,7 +58,7 @@
     "base_path": "isos",
     "items": [
       { "name": "Ubuntu Desktop", "url": "https://releases.ubuntu.com/24.04.1/ubuntu-24.04.1-desktop-amd64.iso", "filename": "ubuntu-24.04-desktop.iso" },
-      { "name": "SystemRescue", "url": "https://sourceforge.net/projects/systemrescuecd/files/sysresccd-x86/11.01/systemrescue-11.01-amd64.iso/download", "filename": "systemrescue.iso" }
+      { "name": "SystemRescue", "url": "https://fastedge.dl.sourceforge.net/project/systemrescuecd/sysresccd-x86/12.03/systemrescue-12.03-amd64.iso", "filename": "systemrescue.iso" }
     ]
   },
   "readers": {
