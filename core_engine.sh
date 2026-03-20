@@ -42,22 +42,46 @@ verify_file_integrity() {
 
     case "$ext" in
         zim)
-            zimcheck -H "$f" &>/dev/null
-            return $? ;;
+            if command -v zimcheck &>/dev/null; then
+                # zimcheck -C prueft die interne Pruefsumme des ZIM-Archivs
+                zimcheck -C "$f" &>/dev/null
+                return $?
+            else
+                log "WARNUNG: zimcheck nicht installiert, ueberspringe Validierung."
+                return 0
+            fi ;;
         pdf)
-            pdfinfo "$f" &>/dev/null
-            return $? ;;
+            if command -v pdfinfo &>/dev/null; then
+                pdfinfo "$f" &>/dev/null
+                return $?
+            else
+                log "WARNUNG: pdfinfo nicht installiert, ueberspringe Validierung."
+                return 0
+            fi ;;
         iso)
-            # Prüft ob ISO-Header lesbar ist
-            isoinfo -d -i "$f" &>/dev/null
-            return $? ;;
+            if command -v isoinfo &>/dev/null; then
+                isoinfo -d -i "$f" &>/dev/null
+                return $?
+            else
+                log "WARNUNG: isoinfo nicht installiert, ueberspringe Validierung."
+                return 0
+            fi ;;
         zip|apk)
-            # Testet die ZIP-Integritaet ohne Entpacken
-            unzip -t "$f" &>/dev/null
-            return $? ;;
+            if command -v unzip &>/dev/null; then
+                unzip -t "$f" &>/dev/null
+                return $?
+            else
+                log "WARNUNG: unzip nicht installiert, ueberspringe Validierung."
+                return 0
+            fi ;;
         json)
-            jq . "$f" &>/dev/null
-            return $? ;;
+            if command -v jq &>/dev/null; then
+                jq . "$f" &>/dev/null
+                return $?
+            else
+                log "WARNUNG: jq nicht installiert, ueberspringe Validierung."
+                return 0
+            fi ;;
         *)
             # Fallback für unbekannte Typen: Nur Existenzprüfung
             return 0 ;;

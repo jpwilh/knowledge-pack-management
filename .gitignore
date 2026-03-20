@@ -1,0 +1,11 @@
+# Temporäre Testdateien
+test_sample.zim
+corrupt.zim
+failed_items.log
+
+# ZIM-Dateien generell (sollten auf dem Mountpoint liegen, nicht im Repo)
+*.zim
+
+# Shell-Temporary
+*.tmp
+/tmp_bin/
