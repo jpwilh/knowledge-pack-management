@@ -16,11 +16,16 @@
       { "name": "Mechanics StackExchange", "url": "https://download.kiwix.org/zim/stack_exchange/mechanics.stackexchange.com_en_all_2026-02.zim", "path": "notfall-pc/01_zim/reparatur" },
       { "name": "DIY StackExchange", "url": "https://download.kiwix.org/zim/stack_exchange/diy.stackexchange.com_en_all_2026-02.zim", "path": "notfall-pc/01_zim/reparatur" },
       { "name": "WikiHow", "url": "https://download.kiwix.org/zim/other/wikihow_en_all_maxi_2023-03.zim", "path": "notfall-pc/01_zim/reparatur" },
+      { "name": "WikiVoyage DE", "url": "https://download.kiwix.org/zim/wikivoyage/wikivoyage_de_all_maxi_2026-01.zim", "path": "notfall-pc/01_zim/wikivoyage", "filename": "wikivoyage_de.zim" },
+      { "name": "WikiBooks DE", "url": "https://download.kiwix.org/zim/wikibooks/wikibooks_de_all_maxi_2026-01.zim", "path": "notfall-pc/01_zim/wikibooks", "filename": "wikibooks_de.zim" },
+      { "name": "Medical Wikipedia EN", "url": "https://download.kiwix.org/zim/medicine/mdwiki_en_all_maxi_2025-11.zim", "path": "notfall-pc/01_zim/medizin" },
+      { "name": "Haltbarmachung (Food Prep)", "url": "https://download.kiwix.org/zim/other/food_prep_en_all_2023-03.zim", "path": "notfall-pc/01_zim/agrar", "filename": "food_prep.zim" },
+      { "name": "Wasseraufbereitung (Water)", "url": "https://download.kiwix.org/zim/other/water_en_all_2023-03.zim", "path": "notfall-pc/01_zim/agrar", "filename": "water.zim" },
       { "name": "Gutenberg DE", "url": "https://download.kiwix.org/zim/gutenberg/gutenberg_de_all_2026-01.zim", "path": "notfall-pc/01_zim/buecher" },
       { "name": "Gutenberg EN", "url": "https://download.kiwix.org/zim/gutenberg/gutenberg_en_all_2025-11.zim", "path": "notfall-pc/01_zim/buecher" },
-      { "name": "FAO Irrigation Manual", "url": "https://www.fao.org/4/ai596e/ai596e.pdf", "path": "notfall-pc/03_landwirtschaft/fao" },
-      { "name": "FAO Crop Water Requirements", "url": "https://www.fao.org/4/f2430e/f2430e.pdf", "path": "notfall-pc/03_landwirtschaft/fao" },
-      { "name": "Primary Surgery Vol 1", "url": "https://global-help.org/publications/books/_Primary_Surgery_Volume_One_Non_Trauma_2nd_Edition_Full_Book.pdf", "path": "notfall-pc/02_medizin/surgery" }
+      { "name": "FAO Irrigation Manual", "url": "https://www.fao.org/4/ai596e/ai596e.pdf", "path": "notfall-pc/03_landwirtschaft/fao", "filename": "irrigation_manual.pdf" },
+      { "name": "FAO Crop Water Requirements", "url": "https://www.fao.org/4/f2430e/f2430e.pdf", "path": "notfall-pc/03_landwirtschaft/fao", "filename": "crop_water_requirements.pdf" },
+      { "name": "Primary Surgery Vol 1", "url": "https://global-help.org/publications/books/_Primary_Surgery_Volume_One_Non_Trauma_2nd_Edition_Full_Book.pdf", "path": "notfall-pc/02_medizin/surgery", "filename": "primary_surgery_vol1_non_trauma.pdf" }
     ]
   },
   "software": {
