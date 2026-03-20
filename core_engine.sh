@@ -3,6 +3,7 @@
 
 # Globale Einstellungen
 DRY_RUN="${DRY_RUN:-false}"
+CHECK_ONLY="${CHECK_ONLY:-false}"
 
 log() { echo "[$(date '+%F %T')] $*"; }
 error() { 
@@ -160,6 +161,17 @@ robust_download() {
 
     local action="download"
     if [ -s "$dest" ]; then action="resume"; fi
+
+    if [ "$CHECK_ONLY" == "true" ]; then
+        if [ -s "$dest" ]; then
+            log "[CHECK-ONLY] Vorhandene Datei wird geprueft: $(basename "$dest")"
+            verify_file_integrity "$dest"
+            return $?
+        else
+            log "[CHECK-ONLY] Datei fehlt, Download uebersprungen: $(basename "$dest")"
+            return 0
+        fi
+    fi
 
     log "Aktion: $action ($url -> $dest)"
     local start_time=$(date +%s)

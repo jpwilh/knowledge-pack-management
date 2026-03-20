@@ -19,14 +19,16 @@ usage() {
     echo "  --models         LLM Modelle (Ollama) laden"
     echo "  --isos           Betriebssystem-Images laden"
     echo "  --dry-run        Simulation (keine Änderungen am Dateisystem)"
+    echo "  --check-only     Kein Download neuer Dateien, nur Integritätsprüfung vorhandener Dateien"
     exit 1
 }
 
 if [ $# -eq 0 ]; then usage; fi
 
-# Globaler Dry-Run Check
+# Globale Flags
 for arg in "$@"; do
     if [ "$arg" == "--dry-run" ]; then export DRY_RUN="true"; fi
+    if [ "$arg" == "--check-only" ]; then export CHECK_ONLY="true"; fi
 done
 
 # --- MODULE ---
@@ -158,6 +160,7 @@ while [[ $# -gt 0 ]]; do
         --models)    run_models; shift ;;
         --isos)      run_isos; shift ;;
         --dry-run)   shift ;;
+        --check-only) shift ;;
         *) usage ;;
     esac
 done
