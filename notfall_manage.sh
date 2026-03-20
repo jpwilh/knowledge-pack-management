@@ -18,10 +18,16 @@ usage() {
     echo "  --software       Java, Python, NPM, Docker laden"
     echo "  --models         LLM Modelle (Ollama) laden"
     echo "  --isos           Betriebssystem-Images laden"
+    echo "  --dry-run        Simulation (keine Änderungen am Dateisystem)"
     exit 1
 }
 
 if [ $# -eq 0 ]; then usage; fi
+
+# Globaler Dry-Run Check
+for arg in "$@"; do
+    if [ "$arg" == "--dry-run" ]; then export DRY_RUN="true"; fi
+done
 
 # --- MODULE ---
 run_knowledge() {
@@ -151,6 +157,7 @@ while [[ $# -gt 0 ]]; do
         --software)  run_software; shift ;;
         --models)    run_models; shift ;;
         --isos)      run_isos; shift ;;
+        --dry-run)   shift ;;
         *) usage ;;
     esac
 done
