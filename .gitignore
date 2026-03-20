@@ -1,11 +1,16 @@
-# Temporäre Testdateien
-test_sample.zim
-corrupt.zim
-failed_items.log
-
-# ZIM-Dateien generell (sollten auf dem Mountpoint liegen, nicht im Repo)
+# Downloads & Artefakte (sollten auf NOTFALL_PC_MOUNT liegen)
 *.zim
+*.iso
+*.pdf
+*.apk
+*.whl
+*.tar
 
-# Shell-Temporary
+# Logs & Temporäres
+failed_items.log
 *.tmp
-/tmp_bin/
+*.log
+
+# System-Dateien
+.DS_Store
+Thumbs.db
