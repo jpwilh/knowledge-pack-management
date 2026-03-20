@@ -15,7 +15,7 @@
       { "name": "iFixit EN", "url": "https://download.kiwix.org/zim/ifixit/ifixit_en_all_2025-12.zim", "path": "notfall-pc/01_zim/reparatur" },
       { "name": "Mechanics StackExchange", "url": "https://download.kiwix.org/zim/stack_exchange/mechanics.stackexchange.com_en_all_2026-02.zim", "path": "notfall-pc/01_zim/reparatur" },
       { "name": "DIY StackExchange", "url": "https://download.kiwix.org/zim/stack_exchange/diy.stackexchange.com_en_all_2026-02.zim", "path": "notfall-pc/01_zim/reparatur" },
-      { "name": "WikiHow", "url": "https://download.kiwix.org/zim/wikihow/wikihow_en_all_maxi_2024-05.zim", "path": "notfall-pc/01_zim/reparatur" },
+      { "name": "WikiHow", "url": "https://download.kiwix.org/zim/other/wikihow_en_all_maxi_2023-03.zim", "path": "notfall-pc/01_zim/reparatur" },
       { "name": "Gutenberg DE", "url": "https://download.kiwix.org/zim/gutenberg/gutenberg_de_all_2026-01.zim", "path": "notfall-pc/01_zim/buecher" },
       { "name": "Gutenberg EN", "url": "https://download.kiwix.org/zim/gutenberg/gutenberg_en_all_2025-11.zim", "path": "notfall-pc/01_zim/buecher" },
       { "name": "FAO Irrigation Manual", "url": "https://www.fao.org/4/ai596e/ai596e.pdf", "path": "notfall-pc/03_landwirtschaft/fao" },
