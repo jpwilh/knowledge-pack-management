@@ -8,7 +8,7 @@
       { "name": "StackOverflow Multi", "url": "https://download.kiwix.org/zim/stack_exchange/stackoverflow.com_en_all_2023-11.zim", "path": "notfall-pc/01_zim/tech" },
       { "name": "Electronics StackExchange", "url": "https://download.kiwix.org/zim/stack_exchange/electronics.stackexchange.com_en_all_2026-02.zim", "path": "notfall-pc/01_zim/tech" },
       { "name": "Wiktionary DE", "url": "https://download.kiwix.org/zim/wiktionary/wiktionary_de_all_nopic_2026-01.zim", "path": "notfall-pc/01_zim/wiktionary" },
-      { "name": "Khan Academy EN", "url": "https://download.kiwix.org/zim/other/khanacademy_en_all_2023-03.zim", "path": "notfall-pc/01_zim/bildung" },
+      { "name": "Khan Academy EN", "url": "https://download.kiwix.org/zim/other/khanacademy_en_all_2023-03.zim", "path": "notfall-pc/01_zim/bildung", "filename": "khanacademy_en_all.zim" },
       { "name": "LibreTexts Chemistry", "url": "https://download.kiwix.org/zim/libretexts/libretexts.org_en_chem_2025-01.zim", "path": "notfall-pc/01_zim/science" },
       { "name": "LibreTexts Physics", "url": "https://download.kiwix.org/zim/libretexts/libretexts.org_en_phys_2026-01.zim", "path": "notfall-pc/01_zim/science" },
       { "name": "iFixit DE", "url": "https://download.kiwix.org/zim/ifixit/ifixit_de_all_2025-06.zim", "path": "notfall-pc/01_zim/reparatur" },
